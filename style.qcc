@@ -1,0 +1,3 @@
+QPushButton#edit_btn {
+    color: green;
+}

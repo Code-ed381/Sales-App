@@ -1,0 +1,61 @@
+    Product table:
+
+    ProductID (primary key)
+    ProductName
+    Description
+    Quantity
+    Price
+
+    Category table:
+
+    CategoryID (primary key)
+    CategoryName
+
+    ProductCategory table (junction table to associate products with multiple categories):
+
+    ProductID (foreign key to Product table)
+    CategoryID (foreign key to Category table)
+
+    Vendor table:
+
+    VendorID (primary key)
+    VendorName
+    ContactName
+    Phone
+    Email
+
+    PurchaseOrder table:
+
+    PurchaseOrderID (primary key)
+    VendorID (foreign key to Vendor table)
+    OrderDate
+    ShippingDate
+
+    PurchaseOrderDetail table (to track the items on each purchase order):
+
+    PurchaseOrderDetailID (primary key)
+    PurchaseOrderID (foreign key to PurchaseOrder table)
+    ProductID (foreign key to Product table)
+    Quantity
+    Price
+
+    Customer table:
+
+    CustomerID (primary key)
+    CustomerName
+    Phone
+    Email
+
+    Invoice table:
+
+    InvoiceID (primary key)
+    CustomerID (foreign key to Customer table)
+    InvoiceDate
+
+    InvoiceDetail table (to track the items on each invoice):
+
+    InvoiceDetailID (primary key)
+    InvoiceID (foreign key to Invoice table)
+    ProductID (foreign key to Product table)
+    Quantity
+    Price
