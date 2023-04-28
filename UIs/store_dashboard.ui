@@ -251,51 +251,6 @@ color: rgb(0, 0, 255);</string>
            </widget>
           </item>
           <item>
-           <widget class="QWidget" name="widget_22" native="true">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>40</height>
-             </size>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_23">
-             <property name="leftMargin">
-              <number>19</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-             <item alignment="Qt::AlignLeft">
-              <widget class="QPushButton" name="customers">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">font: 75 10pt &quot;MS Shell Dlg 2&quot;;
-color: rgb(0, 0, 255);</string>
-               </property>
-               <property name="text">
-                <string>Customer Information</string>
-               </property>
-               <property name="icon">
-                <iconset>
-                 <normaloff>../icons/followers-friends-icon.png</normaloff>../icons/followers-friends-icon.png</iconset>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
            <widget class="QWidget" name="widget_21" native="true">
             <property name="maximumSize">
              <size>
@@ -334,54 +289,6 @@ color: rgb(0, 0, 255);</string>
                <property name="icon">
                 <iconset>
                  <normaloff>../icons/order-placed-purchased-icon.png</normaloff>../icons/order-placed-purchased-icon.png</iconset>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QWidget" name="widget_24" native="true">
-            <layout class="QVBoxLayout" name="verticalLayout_11">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <property name="leftMargin">
-              <number>19</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-             <item alignment="Qt::AlignLeft">
-              <widget class="QPushButton" name="users_2">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">font: 75 10pt &quot;MS Shell Dlg 2&quot;;
-color: rgb(0, 0, 255);</string>
-               </property>
-               <property name="text">
-                <string>Users</string>
-               </property>
-               <property name="icon">
-                <iconset>
-                 <normaloff>../icons/edit-pen-icon.png</normaloff>../icons/edit-pen-icon.png</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>16</width>
-                 <height>16</height>
-                </size>
                </property>
               </widget>
              </item>

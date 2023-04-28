@@ -317,7 +317,7 @@ color: rgb(0, 0, 255);</string>
 color: rgb(0, 0, 255);</string>
                   </property>
                   <property name="text">
-                   <string>Customers</string>
+                   <string>Customer Information</string>
                   </property>
                   <property name="icon">
                    <iconset>
@@ -362,7 +362,7 @@ color: rgb(0, 0, 255);</string>
 color: rgb(0, 0, 255);</string>
                   </property>
                   <property name="text">
-                   <string>Purchases</string>
+                   <string>Sales Tracking</string>
                   </property>
                   <property name="icon">
                    <iconset>
@@ -716,40 +716,6 @@ font: 10pt &quot;Open Sans&quot;;</string>
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item>
-                 <widget class="QPushButton" name="viewCart">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>120</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">background-color: rgb(141, 70, 212);
-color: rgb(255, 255, 255);
-font: 75 11pt &quot;Open Sans Extrabold&quot;;</string>
-                  </property>
-                  <property name="text">
-                   <string>View Cart</string>
-                  </property>
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>../icons/grocery-cart.png</normaloff>../icons/grocery-cart.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>32</width>
-                    <height>21</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
                </layout>
               </widget>
              </item>

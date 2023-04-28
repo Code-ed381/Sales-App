@@ -194,7 +194,7 @@ font: 75 11pt &quot;MS Shell Dlg 2&quot;;</string>
 font: 75 11pt &quot;MS Shell Dlg 2&quot;;</string>
         </property>
         <property name="maxVisibleItems">
-         <number>2</number>
+         <number>4</number>
         </property>
        </widget>
       </item>

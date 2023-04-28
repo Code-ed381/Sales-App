@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>941</width>
+    <width>931</width>
     <height>520</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Customers</string>
+   <string>Products</string>
   </property>
   <property name="styleSheet">
    <string notr="true">MainWindow{
@@ -237,6 +237,9 @@ color: rgb(0, 85, 255);</string>
                  <height>40</height>
                 </size>
                </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: rgb(210, 210, 241);</string>
+               </property>
                <layout class="QVBoxLayout" name="verticalLayout_22">
                 <property name="leftMargin">
                  <number>19</number>
@@ -288,9 +291,6 @@ color: rgb(0, 0, 255);</string>
                  <height>40</height>
                 </size>
                </property>
-               <property name="styleSheet">
-                <string notr="true">background-color: rgb(210, 210, 241);</string>
-               </property>
                <layout class="QVBoxLayout" name="verticalLayout_23">
                 <property name="leftMargin">
                  <number>19</number>
@@ -317,7 +317,7 @@ color: rgb(0, 0, 255);</string>
 color: rgb(0, 0, 255);</string>
                   </property>
                   <property name="text">
-                   <string>Customer Information</string>
+                   <string>Customers Information</string>
                   </property>
                   <property name="icon">
                    <iconset>
@@ -367,54 +367,6 @@ color: rgb(0, 0, 255);</string>
                   <property name="icon">
                    <iconset>
                     <normaloff>../icons/order-placed-purchased-icon.png</normaloff>../icons/order-placed-purchased-icon.png</iconset>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QWidget" name="widget_24" native="true">
-               <layout class="QVBoxLayout" name="verticalLayout_11">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <property name="leftMargin">
-                 <number>19</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-                <item alignment="Qt::AlignLeft">
-                 <widget class="QPushButton" name="users_2">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">font: 75 10pt &quot;MS Shell Dlg 2&quot;;
-color: rgb(0, 0, 255);</string>
-                  </property>
-                  <property name="text">
-                   <string>Users</string>
-                  </property>
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>../icons/edit-pen-icon.png</normaloff>../icons/edit-pen-icon.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>16</width>
-                    <height>16</height>
-                   </size>
                   </property>
                  </widget>
                 </item>
@@ -503,7 +455,8 @@ border-radius: 5px;</string>
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color: rgb(238, 238, 238);</string>
+          <string notr="true">background-color: rgb(238, 238, 238);
+border-radius:5px</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <property name="leftMargin">
@@ -524,10 +477,10 @@ border-radius: 5px;</string>
              <string notr="true">font: 81 8pt &quot;Open Sans ExtraBold&quot;;</string>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Customers&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Products&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="margin">
-             <number>9</number>
+             <number>3</number>
             </property>
             <property name="indent">
              <number>10</number>
@@ -548,8 +501,20 @@ border-radius: 5px;</string>
               <height>50</height>
              </size>
             </property>
+            <property name="sizeIncrement">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="styleSheet">
-             <string notr="true">border-radius: 50% !important;</string>
+             <string notr="true">radius: 40px;</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
             </property>
             <property name="text">
              <string/>
@@ -559,6 +524,12 @@ border-radius: 5px;</string>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
+            </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <property name="openExternalLinks">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -663,7 +634,7 @@ border-radius: 5px;</string>
 font: 10pt &quot;Open Sans&quot;;</string>
                   </property>
                   <property name="placeholderText">
-                   <string>Search Customer....</string>
+                   <string>Search Item....</string>
                   </property>
                  </widget>
                 </item>
@@ -697,6 +668,40 @@ font: 10pt &quot;Open Sans&quot;;</string>
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
+                <item>
+                 <widget class="QPushButton" name="viewCart">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>120</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: rgb(141, 70, 212);
+color: rgb(255, 255, 255);
+font: 75 11pt &quot;Open Sans Extrabold&quot;;</string>
+                  </property>
+                  <property name="text">
+                   <string>View Cart</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../icons/grocery-cart.png</normaloff>../icons/grocery-cart.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>32</width>
+                    <height>21</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </widget>
              </item>
@@ -748,40 +753,6 @@ font: 10pt &quot;Open Sans&quot;;</string>
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item>
-                 <widget class="QPushButton" name="add_new_cat_2">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>150</width>
-                    <height>50</height>
-                   </size>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">background-color: rgb(141, 70, 212);
-color: rgb(255, 255, 255);
-font: 75 11pt &quot;Open Sans Extrabold&quot;;</string>
-                  </property>
-                  <property name="text">
-                   <string>Add Customer</string>
-                  </property>
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>../icons/icons8-customer-64.png</normaloff>../icons/icons8-customer-64.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>32</width>
-                    <height>22</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
                </layout>
               </widget>
              </item>
@@ -798,13 +769,13 @@ font: 75 11pt &quot;Open Sans Extrabold&quot;;</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_10">
              <item>
-              <widget class="QTableWidget" name="customer_table">
+              <widget class="QTableWidget" name="table">
                <property name="font">
                 <font>
                  <family>Open Sans ExtraBold</family>
                  <pointsize>10</pointsize>
-                 <weight>75</weight>
-                 <bold>true</bold>
+                 <weight>50</weight>
+                 <bold>false</bold>
                 </font>
                </property>
                <property name="cursor" stdset="0">
@@ -851,7 +822,7 @@ font: 75 11pt &quot;Open Sans Extrabold&quot;;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>941</width>
+     <width>931</width>
      <height>21</height>
     </rect>
    </property>

@@ -317,7 +317,7 @@ color: rgb(0, 0, 255);</string>
 color: rgb(0, 0, 255);</string>
                   </property>
                   <property name="text">
-                   <string>Customers</string>
+                   <string>Customer Information</string>
                   </property>
                   <property name="icon">
                    <iconset>
@@ -365,7 +365,7 @@ color: rgb(0, 0, 255);</string>
 color: rgb(0, 0, 255);</string>
                   </property>
                   <property name="text">
-                   <string>Purchases</string>
+                   <string>Sales Tracking</string>
                   </property>
                   <property name="icon">
                    <iconset>
