@@ -269,7 +269,7 @@ color: rgb(0, 85, 255);</string>
 color: rgb(0, 0, 255);</string>
                   </property>
                   <property name="text">
-                   <string>Products</string>
+                   <string>Inventory</string>
                   </property>
                   <property name="icon">
                    <iconset>
@@ -375,7 +375,7 @@ color: rgb(0, 0, 255);</string>
              </item>
              <item>
               <widget class="QWidget" name="widget_14" native="true">
-               <layout class="QVBoxLayout" name="verticalLayout_11">
+               <layout class="QVBoxLayout" name="verticalLayout_13">
                 <property name="leftMargin">
                  <number>19</number>
                 </property>
@@ -391,7 +391,7 @@ color: rgb(0, 0, 255);</string>
                 <item alignment="Qt::AlignLeft">
                  <widget class="QPushButton" name="suppliers">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>

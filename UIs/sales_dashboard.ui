@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>990</width>
-    <height>520</height>
+    <height>579</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -239,7 +239,7 @@ color: rgb(0, 85, 255);</string>
 color: rgb(0, 0, 255);</string>
                </property>
                <property name="text">
-                <string>Products</string>
+                <string>Inventory</string>
                </property>
                <property name="icon">
                 <iconset>
@@ -334,6 +334,45 @@ color: rgb(0, 0, 255);</string>
                <property name="icon">
                 <iconset>
                  <normaloff>../icons/order-placed-purchased-icon.png</normaloff>../icons/order-placed-purchased-icon.png</iconset>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_7" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <property name="leftMargin">
+              <number>19</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item alignment="Qt::AlignLeft">
+              <widget class="QPushButton" name="suppliers">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(0, 0, 255);</string>
+               </property>
+               <property name="text">
+                <string>Suppliers</string>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>../icons/hotel-supplier.png</normaloff>../icons/hotel-supplier.png</iconset>
                </property>
               </widget>
              </item>
@@ -677,7 +716,7 @@ font: 8pt &quot;MS Shell Dlg 2&quot;;</string>
 font: 14pt &quot;Myanmar Text&quot;;</string>
                         </property>
                         <property name="text">
-                         <string>Products</string>
+                         <string>Suppliers</string>
                         </property>
                        </widget>
                       </item>
@@ -819,17 +858,80 @@ font: 75 22pt &quot;Open Sans Extrabold&quot;;</string>
            </widget>
           </item>
           <item>
-           <widget class="PlotWidget" name="graphWidget" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
+           <widget class="QFrame" name="frame">
             <property name="styleSheet">
              <string notr="true">background-color: rgb(255, 255, 255);</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_5"/>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <item alignment="Qt::AlignTop">
+              <widget class="QLabel" name="label_6">
+               <property name="styleSheet">
+                <string notr="true">font: 81 8pt &quot;Open Sans ExtraBold&quot;;</string>
+               </property>
+               <property name="text">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Sales Report&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFrame" name="frame_2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_6">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QWidget" name="widget_15" native="true">
+                  <property name="maximumSize">
+                   <size>
+                    <width>400</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_8">
+                   <item>
+                    <widget class="QTableWidget" name="report_one">
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>
@@ -844,7 +946,7 @@ font: 75 22pt &quot;Open Sans Extrabold&quot;;</string>
           <item alignment="Qt::AlignHCenter">
            <widget class="QLabel" name="label_8">
             <property name="text">
-             <string>2023 JAMS Final Project Work</string>
+             <string>2023 Final Project Work</string>
             </property>
            </widget>
           </item>
@@ -868,14 +970,6 @@ font: 75 22pt &quot;Open Sans Extrabold&quot;;</string>
    </property>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>PlotWidget</class>
-   <extends>QWidget</extends>
-   <header>pyqtgraph</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../resources.qrc"/>
  </resources>

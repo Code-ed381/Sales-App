@@ -26,13 +26,11 @@ else:
         FOREIGN KEY("ProductID") REFERENCES "product"("ProductID"),
         PRIMARY KEY("CartID" AUTOINCREMENT)
     );""")
-
     db.execute("""CREATE TABLE "category" (
         "CategoryID"	INTEGER NOT NULL,
         "CategoryName"	TEXT NOT NULL UNIQUE,
         PRIMARY KEY("CategoryID")
     );""")
-
     db.execute("""CREATE TABLE "product" (
         "ProductID"	INTEGER NOT NULL,
         "ProductName"	TEXT NOT NULL UNIQUE,
@@ -43,35 +41,44 @@ else:
         FOREIGN KEY("CategoryID") REFERENCES "category"("CategoryID"),
         PRIMARY KEY("ProductID")
     );""")
-
     db.execute("""CREATE TABLE "customer" (
         "CustomerID"	INTEGER NOT NULL,
         "CustomerName"	TEXT NOT NULL,
         "Phone"	TEXT NOT NULL,
-        "Email"	TEXT,
-        "BusinessName"	TEXT,
+        "Email"	TEXT NOT NULL,
+        "BusinessName"	TEXT NOT NULL,
         PRIMARY KEY("CustomerID")
     );""")
-
     db.execute("""CREATE TABLE "purchase" (
         "PurchaseID"	INTEGER,
         "Items"	TEXT NOT NULL,
         "Total_Amount"	INTEGER NOT NULL,
         "Amount_Paid"	INTEGER NOT NULL,
-        "Balance"	INTEGER,
+        "Balance"	INTEGER NOT NULL,
         "DateTime"	TEXT NOT NULL,
         PRIMARY KEY("PurchaseID" AUTOINCREMENT)
     );""")
-
     db.execute("""CREATE TABLE "users" (
         "id"	INTEGER NOT NULL,
         "username"	TEXT NOT NULL,
         "name"	TEXT NOT NULL,
         "email"	TEXT NOT NULL,
         "password"	TEXT NOT NULL UNIQUE,
-        "image"	TEXT,
+        "image"	TEXT NOT NULL,
         "role"	INTEGER NOT NULL DEFAULT 'admin',
         PRIMARY KEY("id" AUTOINCREMENT)
+    );""")
+    db.execute("""CREATE TABLE "supplier" (
+        "SupplierID"	INTEGER,
+        "SupplierName"	TEXT NOT NULL,
+        "Phone"	INTEGER NOT NULL,
+        "Email"	TEXT NOT NULL,
+        PRIMARY KEY("SupplierID" AUTOINCREMENT)
+    );""")
+    db.execute("""CREATE TABLE "report" (
+        "Item"	TEXT,
+        "Quantity"	INTEGER NOT NULL,
+        "DateTime"	TEXT NOT NULL,
     );""")
 
     db.commit()
@@ -180,7 +187,6 @@ class AddProduct(QDialog):
                 'Fill out all fields',
                 QMessageBox.StandardButton.Ok
             )
-
 class AddCustomer(QDialog):
     def __init__(self, customer_table, deleteClicked):
         super(AddCustomer, self).__init__()
@@ -234,7 +240,57 @@ class AddCustomer(QDialog):
             'Customer added',
             QMessageBox.StandardButton.Ok
         )
+class AddSupplier(QDialog):
+    def __init__(self, customer_table, deleteClicked):
+        super(AddSupplier, self).__init__()
+        loadUi('./UIs/add_supplier.ui', self)
+        self.save.clicked.connect(self.addNewCustomer)
+        self.cancel.clicked.connect(self.closeIt)   
+        self.customer_table = customer_table
+        self.deleteClicked = deleteClicked
 
+    def closeIt(self): 
+        self.close()
+
+    def addNewCustomer(self):
+        name = self.name.text()
+        phone = self.phone.text()
+        email = self.email.text()
+
+        try:
+            query = """INSERT INTO supplier (SupplierName, Phone, Email) VALUES(?,?,?)"""
+            data = (name, phone, email)
+            mycursor.execute(query, data)
+            db.commit()
+        except:
+            QMessageBox.critical(
+                self,
+                'Failed - Database error occurred',
+                'Add Supplier Failed!',
+                QMessageBox.StandardButton.Ok
+            )
+
+        self.delete_btn = QPushButton('delete')
+        self.delete_btn.setIcon(QIcon('./icons/recycle-bin-line-icon.png'))
+        self.delete_btn.setStyleSheet('QPushButton { background-color:  rgb(170, 0, 0); color: #fff }')
+        self.delete_btn.clicked.connect(self.deleteClicked)
+
+        rowPosition = self.customer_table.rowCount()
+        self.customer_table.insertRow(rowPosition)
+
+        self.customer_table.setItem(rowPosition, 0, QTableWidgetItem(str(name)))
+        self.customer_table.setItem(rowPosition, 1, QTableWidgetItem(str(phone)))
+        self.customer_table.setItem(rowPosition, 2, QTableWidgetItem(str(email)))
+        self.customer_table.setCellWidget(rowPosition, 3, self.delete_btn)
+        
+        self.close()
+
+        QMessageBox.information(
+            self,
+            'Successful',
+            'Supplier added',
+            QMessageBox.StandardButton.Ok
+        )
 class AddUser(QDialog):
     def __init__(self, users_table, deleteClicked):
         super(AddUser, self).__init__()
@@ -340,7 +396,6 @@ class AddUser(QDialog):
             'User added',
             QMessageBox.StandardButton.Ok
         )
-
 class AddToCart(QDialog):
     def __init__(self, product_id):
         self.item = product_id
@@ -385,8 +440,6 @@ class AddToCart(QDialog):
                 'The quantity you entered is more than we have in stock!',
                 QMessageBox.StandardButton.Ok
             )
-
-
 class Success(QDialog):
     def __init__(self):
         super(Success, self).__init__()
@@ -396,7 +449,6 @@ class Success(QDialog):
 
     def closeIt(self): 
         self.close()
-
 class AddCategory(QDialog):
     def __init__(self):
         super(AddCategory, self).__init__()
@@ -434,7 +486,6 @@ class AddCategory(QDialog):
 
     def closeIt(self): 
         self.close()
-
 class AmountPaid(QDialog):
     def __init__(self, cartItems, total):
         super(AmountPaid, self).__init__()
@@ -469,6 +520,7 @@ class AmountPaid(QDialog):
                     comma = ', '
                     print(self.cartItems)
 
+
                     for item in self.cartItems:
                         items += item[3]
                         items += comma
@@ -484,6 +536,20 @@ class AmountPaid(QDialog):
                                 'Update Quantity Failed',
                                 QMessageBox.StandardButton.Ok
                             )
+
+                    for report in self.cartItems:
+                        try:
+                            query = "INSERT INTO report VALUES (?,?,datetime('now'))"
+                            mycursor.execute(query,(report[3], report[2]))
+                            db.commit()
+                        except:
+                            QMessageBox.critical(
+                                self,
+                                'Failed - Database error occurred',
+                                'Insert Report Failed',
+                                QMessageBox.StandardButton.Ok
+                            )
+
 
                     balance = self.total - int(amount)
 
@@ -545,7 +611,6 @@ class AmountPaid(QDialog):
 
     def closeIt(self): 
         self.close()
-
 class ViewCart(QDialog):
     def __init__(self):
         super(ViewCart, self).__init__()
@@ -784,7 +849,6 @@ class ViewCart(QDialog):
                     'Delete Item Failed',
                     QMessageBox.StandardButton.Ok
                 )
-
 class LoginScreen(QDialog):
     def __init__(self):
         super(LoginScreen, self).__init__()
@@ -837,7 +901,6 @@ class LoginScreen(QDialog):
             store(self)
         elif 'sales' in results[0]:
             sales(self)
-
 class Register(QDialog):
     def __init__(self):
         super(Register, self).__init__()
@@ -884,7 +947,6 @@ class Register(QDialog):
                 'Passwords do not match',
                 QMessageBox.StandardButton.Ok
             )
- 
 #######END - PUBLIC########
 
 
@@ -898,11 +960,12 @@ class SalesAttendantDashboard(QMainWindow):
 
         self.dashboard.clicked.connect(self.dashboards)
         self.products.clicked.connect(self.productss)
+        self.suppliers.clicked.connect(self.supplier)
         self.customers.clicked.connect(self.customer)
         self.cart.clicked.connect(self.purchase)
         self.logout.clicked.connect(self.login)
 
-        self.plot([1,2,3,4,5,6,7,8,9,10], [30,32,34,32,33,31,29,32,35,45])
+        # self.plot([1,2,3,4,5,6,7,8,9,10], [30,32,34,32,33,31,29,32,35,45])
 
         try:
             query = "SELECT name,image,role FROM users where password = ? and username = ?"
@@ -920,7 +983,7 @@ class SalesAttendantDashboard(QMainWindow):
         self.image.setPixmap(pic)
 
         try:
-            self.products = mycursor.execute("SELECT * FROM product").fetchall()
+            self.products = mycursor.execute("SELECT * FROM supplier").fetchall()
             self.customer = mycursor.execute("SELECT * FROM customer").fetchall()
             self.cart = mycursor.execute("SELECT * FROM cart").fetchall()
             self.amounts = mycursor.execute("SELECT Total_Amount FROM purchase").fetchall()
@@ -932,6 +995,34 @@ class SalesAttendantDashboard(QMainWindow):
                 QMessageBox.StandardButton.Ok
             ) 
 
+        try:
+            self.report = mycursor.execute("SELECT * FROM report").fetchall()
+            print(self.report)
+        except:
+            QMessageBox.critical(
+                self,
+                'Failed - Database error',
+                'Get Products Failed',
+                QMessageBox.StandardButton.Ok
+            )
+
+        label = ['Item', 'Quantity', 'DateTime']
+
+        self.report_one.setColumnCount(3)
+        self.report_one.setColumnWidth(0, 100)
+        self.report_one.setColumnWidth(1, 80)
+        self.report_one.setColumnWidth(2, 200)
+
+        self.report_one.setHorizontalHeaderLabels(label)
+        self.report_one.setRowCount(len(self.report))
+
+        row = 0
+        for e in self.report:
+            self.report_one.setItem(row, 0, QTableWidgetItem(str(e[0])))
+            self.report_one.setItem(row, 1, QTableWidgetItem(str(e[1])))
+            self.report_one.setItem(row, 2, QTableWidgetItem(str(e[2])))
+            row+=1
+
         total_amount = 0
         for amount in self.amounts:
             total_amount += amount[0]
@@ -940,11 +1031,11 @@ class SalesAttendantDashboard(QMainWindow):
         self.customers_2.setText(str(len(self.customer)))
         self.cart_2.setText(str(len(self.cart)))
 
-    def plot(self, hour, temperature):
-        self.graphWidget.plot(hour, temperature)
-        self.graphWidget.setTitle("Monthly Sales")
-        self.graphWidget.setLabel('left', 'Sales', color='red', size=40)
-        self.graphWidget.setLabel('bottom', 'Month', color='red', size=40)
+    # def plot(self, hour, temperature):
+    #     self.graphWidget.plot(hour, temperature)
+    #     self.graphWidget.setTitle("Monthly Sales")
+    #     self.graphWidget.setLabel('left', 'Sales', color='red', size=40)
+    #     self.graphWidget.setLabel('bottom', 'Month', color='red', size=40)
 
     def dashboards(self):
         home = SalesAttendantDashboard()
@@ -965,12 +1056,16 @@ class SalesAttendantDashboard(QMainWindow):
         purchase = SalesAttendantPurchases()
         widget.addWidget(purchase)
         widget.setCurrentIndex(widget.currentIndex()+1)
+            
+    def supplier(self):
+        suppliers = SalesAttendantSuppliers()
+        widget.addWidget(suppliers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
 
     def login(self):
         login = LoginScreen()
         widget.addWidget(login)
         widget.setCurrentIndex(widget.currentIndex()+1)
-    
 class SalesAttendantPurchases(QMainWindow):
     def __init__(self):
         super(SalesAttendantPurchases, self).__init__()
@@ -995,6 +1090,7 @@ class SalesAttendantPurchases(QMainWindow):
 
         self.dashboard.clicked.connect(self.dashboards)
         self.products.clicked.connect(self.productss)
+        self.suppliers.clicked.connect(self.supplier)
         self.customers.clicked.connect(self.customer)
         self.cart.clicked.connect(self.purchase)
         self.logout.clicked.connect(self.login)
@@ -1061,12 +1157,16 @@ class SalesAttendantPurchases(QMainWindow):
         purchase = SalesAttendantPurchases()
         widget.addWidget(purchase)
         widget.setCurrentIndex(widget.currentIndex()+1)
+            
+    def supplier(self):
+        suppliers = SalesAttendantSuppliers()
+        widget.addWidget(suppliers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
 
     def login(self):
         login = LoginScreen()
         widget.addWidget(login)
         widget.setCurrentIndex(widget.currentIndex()+1)
-
 class SalesAttendantProducts(QMainWindow):
     def __init__(self):
         super(SalesAttendantProducts, self).__init__()
@@ -1091,6 +1191,7 @@ class SalesAttendantProducts(QMainWindow):
 
         self.dashboard.clicked.connect(self.dashboards)
         self.products.clicked.connect(self.productss)
+        self.suppliers.clicked.connect(self.supplier)
         self.customers.clicked.connect(self.customer)
         self.cart.clicked.connect(self.purchase)
         self.logout.clicked.connect(self.login)
@@ -1204,6 +1305,11 @@ class SalesAttendantProducts(QMainWindow):
         purchase = SalesAttendantPurchases()
         widget.addWidget(purchase)
         widget.setCurrentIndex(widget.currentIndex()+1)
+            
+    def supplier(self):
+        suppliers = SalesAttendantSuppliers()
+        widget.addWidget(suppliers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
 
     def login(self):
         login = LoginScreen()
@@ -1235,6 +1341,7 @@ class SalesAttendantCustomers(QMainWindow):
 
         self.dashboard.clicked.connect(self.dashboards)
         self.products.clicked.connect(self.productss)
+        self.suppliers.clicked.connect(self.supplier)
         self.customers.clicked.connect(self.customer)
         self.cart.clicked.connect(self.purchase)
         self.logout.clicked.connect(self.login)
@@ -1353,12 +1460,162 @@ class SalesAttendantCustomers(QMainWindow):
         purchase = SalesAttendantPurchases()
         widget.addWidget(purchase)
         widget.setCurrentIndex(widget.currentIndex()+1)
+            
+    def supplier(self):
+        suppliers = SalesAttendantSuppliers()
+        widget.addWidget(suppliers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
 
     def login(self):
         login = LoginScreen()
         widget.addWidget(login)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        
+class SalesAttendantSuppliers(QMainWindow):
+    def __init__(self):
+        super(SalesAttendantSuppliers, self).__init__()
+        loadUi('./UIs/sales_supplier.ui', self)
+
+        self.search.textChanged.connect(self.searchs)
+
+        try:
+            query = "SELECT name,image,role FROM users where password = ? and username = ?"
+            self.result = mycursor.execute(query, (password, username)).fetchone()
+        except:
+            QMessageBox.critical(
+                self,
+                'Failed - Database error',
+                'Find User Failed',
+                QMessageBox.StandardButton.Ok
+            )
+
+        self.username.setText(str(self.result[0]))
+        pic = QPixmap(self.result[1])
+        self.image.setPixmap(pic)
+
+        self.add_new_cat_2.clicked.connect(self.executeAddSupplier)
+
+        self.dashboard.clicked.connect(self.dashboards)
+        self.products.clicked.connect(self.productss)
+        self.suppliers.clicked.connect(self.supplier)
+        self.customers.clicked.connect(self.customer)
+        self.cart.clicked.connect(self.purchase)
+        self.logout.clicked.connect(self.login)
+
+        try:
+            result = mycursor.execute("SELECT * FROM supplier").fetchall()
+        except:
+            QMessageBox.critical(
+                self,
+                'Failed - Database error',
+                'Get Customers Failed',
+                QMessageBox.StandardButton.Ok
+            )
+
+        label = [
+            'Name', 'Phone', 'Email'
+        ]
+
+        self.suppliers_table.setColumnCount(3)
+        self.suppliers_table.setColumnWidth(0, 250)
+        self.suppliers_table.setColumnWidth(1, 150)
+        self.suppliers_table.setColumnWidth(2, 250)
+
+        self.suppliers_table.setHorizontalHeaderLabels(label)
+        self.suppliers_table.setRowCount(len(result))
+
+        row = 0
+        for e in result:
+            self.suppliers_table.setItem(row, 0, QTableWidgetItem(e[1]))
+            self.suppliers_table.setItem(row, 1, QTableWidgetItem(e[2]))
+            self.suppliers_table.setItem(row, 2, QTableWidgetItem(str(e[3])))
+            row += 1
+
+    def executeAddSupplier(self):
+        add_supplier = AddSupplier(self.suppliers_table, self.deleteClicked)
+        add_supplier.setWindowIcon(QIcon('./icons/followers-friends-icon.png'))
+        add_supplier.exec()
+
+    def searchs(self, words):
+        self.suppliers_table.setCurrentItem(None)
+
+        if not words:
+            return
+        matching_items = self.suppliers_table.findItems(words, Qt.MatchFlag.MatchContains)
+        if matching_items:
+            for item in matching_items:
+                item.setSelected(True)
+
+    def deleteClicked(self):
+        row = self.suppliers_table.currentRow()
+        item = self.suppliers_table.item(row, 0).text()
+
+        button = QMessageBox.critical(
+            self,
+            'Delete item',
+            'Are you sure that you want to delete this supplier?',
+            QMessageBox.StandardButton.Yes |
+            QMessageBox.StandardButton.No
+        )
+
+        if button == QMessageBox.StandardButton.Yes:
+            self.suppliers_table.removeRow(row)
+
+            try: 
+                try:
+                    query = "DELETE FROM supplier WHERE SupplierName = ?"
+                    mycursor.execute(query, (item,))
+                    db.commit()
+                except:
+                    QMessageBox.critical(
+                        self,
+                        'Failed - Database error',
+                        'Delete Supplier Failed',
+                        QMessageBox.StandardButton.Ok
+                    )
+
+                button = QMessageBox.information(
+                    self,
+                    'Successful',
+                    'Supplier deleted successfully',
+                    QMessageBox.StandardButton.Ok
+                )
+            except:
+                button = QMessageBox.warning(
+                    self,
+                    'Failed!',
+                    'Delete Supplier failed',
+                    QMessageBox.StandardButton.Ok
+                )
+
+    def dashboards(self):
+        home = SalesAttendantDashboard()
+        widget.addWidget(home)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def productss(self):
+        products = SalesAttendantProducts()
+        widget.addWidget(products)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def customer(self):
+        customers = SalesAttendantCustomers()
+        widget.addWidget(customers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def purchase(self):
+        purchase = SalesAttendantPurchases()
+        widget.addWidget(purchase)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+            
+    def supplier(self):
+        suppliers = SalesAttendantSuppliers()
+        widget.addWidget(suppliers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def login(self):
+        login = LoginScreen()
+        widget.addWidget(login)
+        widget.setCurrentIndex(widget.currentIndex()+1)
 #######END - SALES ATTENDANT########
 
 
@@ -1370,10 +1627,12 @@ class StoreOfficerDashboard(QMainWindow):
 
         self.dashboard.clicked.connect(self.dashboards)
         self.products.clicked.connect(self.productss)
+        self.suppliers.clicked.connect(self.supplier)
+        self.customers.clicked.connect(self.customer)
         self.cart.clicked.connect(self.purchase)
         self.logout.clicked.connect(self.login)
 
-        self.plot([1,2,3,4,5,6,7,8,9,10], [30,32,34,32,33,31,29,32,35,45])
+        # self.plot([1,2,3,4,5,6,7,8,9,10], [30,32,34,32,33,31,29,32,35,45])
 
         try:
             query = "SELECT name,image,role FROM users where password = ? and username = ?"
@@ -1391,7 +1650,7 @@ class StoreOfficerDashboard(QMainWindow):
         self.image.setPixmap(pic)
 
         try:
-            self.products = mycursor.execute("SELECT * FROM product").fetchall()
+            self.products = mycursor.execute("SELECT * FROM supplier").fetchall()
             self.customer = mycursor.execute("SELECT * FROM customer").fetchall()
             self.cart = mycursor.execute("SELECT * FROM purchase").fetchall()
             self.amounts = mycursor.execute("SELECT Total_Amount FROM purchase").fetchall()
@@ -1403,6 +1662,34 @@ class StoreOfficerDashboard(QMainWindow):
                 QMessageBox.StandardButton.Ok
             ) 
 
+        try:
+            self.report = mycursor.execute("SELECT * FROM report").fetchall()
+            print(self.report)
+        except:
+            QMessageBox.critical(
+                self,
+                'Failed - Database error',
+                'Get Products Failed',
+                QMessageBox.StandardButton.Ok
+            )
+
+        label = ['Item', 'Quantity', 'DateTime']
+
+        self.report_one.setColumnCount(3)
+        self.report_one.setColumnWidth(0, 100)
+        self.report_one.setColumnWidth(1, 80)
+        self.report_one.setColumnWidth(2, 200)
+
+        self.report_one.setHorizontalHeaderLabels(label)
+        self.report_one.setRowCount(len(self.report))
+
+        row = 0
+        for e in self.report:
+            self.report_one.setItem(row, 0, QTableWidgetItem(str(e[0])))
+            self.report_one.setItem(row, 1, QTableWidgetItem(str(e[1])))
+            self.report_one.setItem(row, 2, QTableWidgetItem(str(e[2])))
+            row+=1
+
         total_amount = 0
         for amount in self.amounts:
             total_amount += amount[0]
@@ -1411,11 +1698,11 @@ class StoreOfficerDashboard(QMainWindow):
         self.customers_2.setText(str(len(self.customer)))
         self.cart_2.setText(str(len(self.cart)))
 
-    def plot(self, hour, temperature):
-        self.graphWidget.plot(hour, temperature)
-        self.graphWidget.setTitle("Monthly Sales")
-        self.graphWidget.setLabel('left', 'Sales', color='red', size=40)
-        self.graphWidget.setLabel('bottom', 'Month', color='red', size=40)
+    # def plot(self, hour, temperature):
+    #     self.graphWidget.plot(hour, temperature)
+    #     self.graphWidget.setTitle("Monthly Sales")
+    #     self.graphWidget.setLabel('left', 'Sales', color='red', size=40)
+    #     self.graphWidget.setLabel('bottom', 'Month', color='red', size=40)
 
     def dashboards(self):
         home = StoreOfficerDashboard()
@@ -1427,6 +1714,16 @@ class StoreOfficerDashboard(QMainWindow):
         widget.addWidget(products)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
+    def customer(self):
+        customers = StoreOfficerCustomers()
+        widget.addWidget(customers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        
+    def supplier(self):
+        suppliers = StoreOfficerSuppliers()
+        widget.addWidget(suppliers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
     def purchase(self):
         purchase = StoreOfficerPurchases()
         widget.addWidget(purchase)
@@ -1435,7 +1732,7 @@ class StoreOfficerDashboard(QMainWindow):
     def login(self):
         login = LoginScreen()
         widget.addWidget(login)
-        widget.setCurrentIndex(widget.currentIndex()+1) 
+        widget.setCurrentIndex(widget.currentIndex()+1)
 class StoreOfficerProducts(QMainWindow):
     def __init__(self):
         super(StoreOfficerProducts, self).__init__()
@@ -1460,8 +1757,11 @@ class StoreOfficerProducts(QMainWindow):
 
         self.dashboard.clicked.connect(self.dashboards)
         self.products.clicked.connect(self.productss)
+        self.suppliers.clicked.connect(self.supplier)
+        self.customers.clicked.connect(self.customer)
         self.cart.clicked.connect(self.purchase)
         self.logout.clicked.connect(self.login)
+
         self.add_product.clicked.connect(self.executeAddProduct)
         self.add_category.clicked.connect(self.executeAddCategory)
 
@@ -1583,6 +1883,16 @@ class StoreOfficerProducts(QMainWindow):
         widget.addWidget(products)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
+    def customer(self):
+        customers = StoreOfficerCustomers()
+        widget.addWidget(customers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        
+    def supplier(self):
+        suppliers = StoreOfficerSuppliers()
+        widget.addWidget(suppliers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
     def purchase(self):
         purchase = StoreOfficerPurchases()
         widget.addWidget(purchase)
@@ -1616,6 +1926,8 @@ class StoreOfficerPurchases(QMainWindow):
 
         self.dashboard.clicked.connect(self.dashboards)
         self.products.clicked.connect(self.productss)
+        self.suppliers.clicked.connect(self.supplier)
+        self.customers.clicked.connect(self.customer)
         self.cart.clicked.connect(self.purchase)
         self.logout.clicked.connect(self.login)
 
@@ -1673,6 +1985,324 @@ class StoreOfficerPurchases(QMainWindow):
         widget.addWidget(products)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
+    def customer(self):
+        customers = StoreOfficerCustomers()
+        widget.addWidget(customers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        
+    def supplier(self):
+        suppliers = StoreOfficerSuppliers()
+        widget.addWidget(suppliers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def purchase(self):
+        purchase = StoreOfficerPurchases()
+        widget.addWidget(purchase)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def login(self):
+        login = LoginScreen()
+        widget.addWidget(login)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+class StoreOfficerCustomers(QMainWindow):
+    def __init__(self):
+        super(StoreOfficerCustomers, self).__init__()
+        loadUi('./UIs/store_customer.ui', self)
+
+        self.search.textChanged.connect(self.searchs)
+
+        try:
+            query = "SELECT name,image,role FROM users where password = ? and username = ?"
+            self.result = mycursor.execute(query, (password, username)).fetchone()
+        except:
+            QMessageBox.critical(
+                self,
+                'Failed - Database error',
+                'Find User Failed',
+                QMessageBox.StandardButton.Ok
+            )
+
+        self.username.setText(str(self.result[0]))
+        pic = QPixmap(self.result[1])
+        self.image.setPixmap(pic)
+
+        self.add_new_cat_2.clicked.connect(self.executeAddCustomer)
+
+        self.dashboard.clicked.connect(self.dashboards)
+        self.products.clicked.connect(self.productss)
+        self.suppliers.clicked.connect(self.supplier)
+        self.customers.clicked.connect(self.customer)
+        self.cart.clicked.connect(self.purchase)
+        self.logout.clicked.connect(self.login)
+
+        try:
+            rows = mycursor.execute("SELECT * FROM customer").fetchall()
+        except:
+            QMessageBox.critical(
+                self,
+                'Failed - Database error',
+                'Get Customers Failed',
+                QMessageBox.StandardButton.Ok
+            )
+
+        label = [
+            'Name', 'Phone', 'Email', 'Business name', 'Delete'
+        ]
+
+        self.customer_table.setColumnCount(5)
+        self.customer_table.setColumnWidth(0, 250)
+        self.customer_table.setColumnWidth(1, 150)
+        self.customer_table.setColumnWidth(2, 250)
+        self.customer_table.setColumnWidth(3, 300)
+        self.customer_table.setColumnWidth(4, 80)
+
+        self.customer_table.setHorizontalHeaderLabels(label)
+        self.customer_table.setRowCount(len(rows))
+
+        row = 0
+        for e in rows:
+            self.delete_btn = QPushButton('delete')
+            self.delete_btn.setIcon(QIcon('./icons/recycle-bin-line-icon.png'))
+            self.delete_btn.setStyleSheet('QPushButton { background-color:  rgb(170, 0, 0); color: #fff }')
+            self.delete_btn.clicked.connect(self.deleteClicked)
+            self.customer_table.setItem(row, 0, QTableWidgetItem(e[1]))
+            self.customer_table.setItem(row, 1, QTableWidgetItem(e[2]))
+            self.customer_table.setItem(row, 2, QTableWidgetItem(str(e[3])))
+            self.customer_table.setItem(row, 3, QTableWidgetItem(str(e[4])))
+            self.customer_table.setCellWidget(row, 4, self.delete_btn)
+            row += 1
+
+    def executeAddCustomer(self):
+        add_customer = AddCustomer(self.customer_table, self.deleteClicked)
+        add_customer.setWindowTitle("Add Customer")
+        add_customer.setWindowIcon(QIcon('./icons/followers-friends-icon.png'))
+        add_customer.exec()
+
+    def searchs(self, words):
+        self.customer_table.setCurrentItem(None)
+
+        if not words:
+            return
+        matching_items = self.customer_table.findItems(words, Qt.MatchFlag.MatchContains)
+        if matching_items:
+            for item in matching_items:
+                item.setSelected(True)
+
+    def deleteClicked(self):
+        row = self.customer_table.currentRow()
+        item = self.customer_table.item(row, 0).text()
+
+        button = QMessageBox.critical(
+            self,
+            'Delete item',
+            'Are you sure that you want to delete this customer?',
+            QMessageBox.StandardButton.Yes |
+            QMessageBox.StandardButton.No
+        )
+
+        if button == QMessageBox.StandardButton.Yes:
+            self.customer_table.removeRow(row)
+
+            try: 
+                try:
+                    query = "DELETE FROM customer WHERE CustomerName = ?"
+                    mycursor.execute(query, (item,))
+                    db.commit()
+                except:
+                    QMessageBox.critical(
+                        self,
+                        'Failed - Database error',
+                        'Delete Customer Failed',
+                        QMessageBox.StandardButton.Ok
+                    )
+
+                button = QMessageBox.information(
+                    self,
+                    'Successful',
+                    'Customer deleted successfully',
+                    QMessageBox.StandardButton.Ok
+                )
+            except:
+                button = QMessageBox.warning(
+                    self,
+                    'Failed!',
+                    'Delete customer failed',
+                    QMessageBox.StandardButton.Ok
+                )
+
+    def dashboards(self):
+        home = StoreOfficerDashboard()
+        widget.addWidget(home)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def productss(self):
+        products = StoreOfficerProducts()
+        widget.addWidget(products)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def customer(self):
+        customers = StoreOfficerCustomers()
+        widget.addWidget(customers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        
+    def supplier(self):
+        suppliers = StoreOfficerSuppliers()
+        widget.addWidget(suppliers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def purchase(self):
+        purchase = StoreOfficerPurchases()
+        widget.addWidget(purchase)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def login(self):
+        login = LoginScreen()
+        widget.addWidget(login)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+class StoreOfficerSuppliers(QMainWindow):
+    def __init__(self):
+        super(StoreOfficerSuppliers, self).__init__()
+        loadUi('./UIs/store_supplier.ui', self)
+
+        self.search.textChanged.connect(self.searchs)
+
+        try:
+            query = "SELECT name,image,role FROM users where password = ? and username = ?"
+            self.result = mycursor.execute(query, (password, username)).fetchone()
+        except:
+            QMessageBox.critical(
+                self,
+                'Failed - Database error',
+                'Find User Failed',
+                QMessageBox.StandardButton.Ok
+            )
+
+        self.username.setText(str(self.result[0]))
+        pic = QPixmap(self.result[1])
+        self.image.setPixmap(pic)
+
+        self.add_new_cat_2.clicked.connect(self.executeAddSupplier)
+
+        self.dashboard.clicked.connect(self.dashboards)
+        self.products.clicked.connect(self.productss)
+        self.suppliers.clicked.connect(self.supplier)
+        self.customers.clicked.connect(self.customer)
+        self.cart.clicked.connect(self.purchase)
+        self.logout.clicked.connect(self.login)
+
+        try:
+            result = mycursor.execute("SELECT * FROM supplier").fetchall()
+        except:
+            QMessageBox.critical(
+                self,
+                'Failed - Database error',
+                'Get Customers Failed',
+                QMessageBox.StandardButton.Ok
+            )
+
+        label = [
+            'Name', 'Phone', 'Email', 'Delete'
+        ]
+
+        self.suppliers_table.setColumnCount(4)
+        self.suppliers_table.setColumnWidth(0, 250)
+        self.suppliers_table.setColumnWidth(1, 150)
+        self.suppliers_table.setColumnWidth(2, 250)
+        self.suppliers_table.setColumnWidth(3, 80)
+
+        self.suppliers_table.setHorizontalHeaderLabels(label)
+        self.suppliers_table.setRowCount(len(result))
+
+        row = 0
+        for e in result:
+            self.delete_btn = QPushButton('delete')
+            self.delete_btn.setIcon(QIcon('./icons/recycle-bin-line-icon.png'))
+            self.delete_btn.setStyleSheet('QPushButton { background-color:  rgb(170, 0, 0); color: #fff }')
+            self.delete_btn.clicked.connect(self.deleteClicked)
+            self.suppliers_table.setItem(row, 0, QTableWidgetItem(e[1]))
+            self.suppliers_table.setItem(row, 1, QTableWidgetItem(e[2]))
+            self.suppliers_table.setItem(row, 2, QTableWidgetItem(str(e[3])))
+            self.suppliers_table.setCellWidget(row, 3, self.delete_btn)
+            row += 1
+
+    def executeAddSupplier(self):
+        add_supplier = AddSupplier(self.suppliers_table, self.deleteClicked)
+        add_supplier.setWindowTitle("Add Customer")
+        add_supplier.setWindowIcon(QIcon('./icons/followers-friends-icon.png'))
+        add_supplier.exec()
+
+    def searchs(self, words):
+        self.suppliers_table.setCurrentItem(None)
+
+        if not words:
+            return
+        matching_items = self.suppliers_table.findItems(words, Qt.MatchFlag.MatchContains)
+        if matching_items:
+            for item in matching_items:
+                item.setSelected(True)
+
+    def deleteClicked(self):
+        row = self.suppliers_table.currentRow()
+        item = self.suppliers_table.item(row, 0).text()
+
+        button = QMessageBox.critical(
+            self,
+            'Delete item',
+            'Are you sure that you want to delete this supplier?',
+            QMessageBox.StandardButton.Yes |
+            QMessageBox.StandardButton.No
+        )
+
+        if button == QMessageBox.StandardButton.Yes:
+            self.suppliers_table.removeRow(row)
+
+            try: 
+                try:
+                    query = "DELETE FROM supplier WHERE SupplierName = ?"
+                    mycursor.execute(query, (item,))
+                    db.commit()
+                except:
+                    QMessageBox.critical(
+                        self,
+                        'Failed - Database error',
+                        'Delete Supplier Failed',
+                        QMessageBox.StandardButton.Ok
+                    )
+
+                button = QMessageBox.information(
+                    self,
+                    'Successful',
+                    'Supplier deleted successfully',
+                    QMessageBox.StandardButton.Ok
+                )
+            except:
+                button = QMessageBox.warning(
+                    self,
+                    'Failed!',
+                    'Delete Supplier failed',
+                    QMessageBox.StandardButton.Ok
+                )
+
+    def dashboards(self):
+        home = StoreOfficerDashboard()
+        widget.addWidget(home)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def productss(self):
+        products = StoreOfficerProducts()
+        widget.addWidget(products)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def customer(self):
+        customers = StoreOfficerCustomers()
+        widget.addWidget(customers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        
+    def supplier(self):
+        suppliers = StoreOfficerSuppliers()
+        widget.addWidget(suppliers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
     def purchase(self):
         purchase = StoreOfficerPurchases()
         widget.addWidget(purchase)
@@ -1695,11 +2325,12 @@ class AdminDashboard(QMainWindow):
         self.dashboard.clicked.connect(self.dashboardss)
         self.products.clicked.connect(self.productss)
         self.customers.clicked.connect(self.customer)
+        self.suppliers.clicked.connect(self.supplier)
         self.cart.clicked.connect(self.purchase)
         self.users_2.clicked.connect(self.user)
         self.logout.clicked.connect(self.login)
 
-        self.plot([1,2,3,4,5,6,7,8,9,10], [30,32,34,32,33,31,29,32,35,45])
+        # self.plot([1,2,3,4,5,6,7,8,9,10], [30,32,34,32,33,31,29,32,35,45])
 
         try:
             query = "SELECT name,image,role FROM users where password = ? and username = ?"
@@ -1717,7 +2348,7 @@ class AdminDashboard(QMainWindow):
         self.image.setPixmap(pic)
 
         try:
-            self.products = mycursor.execute("SELECT * FROM product").fetchall()
+            self.products = mycursor.execute("SELECT * FROM supplier").fetchall()
             self.customer = mycursor.execute("SELECT * FROM customer").fetchall()
             self.cart = mycursor.execute("SELECT * FROM purchase").fetchall()
             self.amounts = mycursor.execute("SELECT Total_Amount FROM purchase").fetchall()
@@ -1729,6 +2360,34 @@ class AdminDashboard(QMainWindow):
                 QMessageBox.StandardButton.Ok
             ) 
 
+        try:
+            self.report = mycursor.execute("SELECT * FROM report").fetchall()
+            print(self.report)
+        except:
+            QMessageBox.critical(
+                self,
+                'Failed - Database error',
+                'Get Products Failed',
+                QMessageBox.StandardButton.Ok
+            )
+
+        label = ['Item', 'Quantity', 'DateTime']
+
+        self.report_one.setColumnCount(3)
+        self.report_one.setColumnWidth(0, 100)
+        self.report_one.setColumnWidth(1, 80)
+        self.report_one.setColumnWidth(2, 200)
+
+        self.report_one.setHorizontalHeaderLabels(label)
+        self.report_one.setRowCount(len(self.report))
+
+        row = 0
+        for e in self.report:
+            self.report_one.setItem(row, 0, QTableWidgetItem(str(e[0])))
+            self.report_one.setItem(row, 1, QTableWidgetItem(str(e[1])))
+            self.report_one.setItem(row, 2, QTableWidgetItem(str(e[2])))
+            row+=1
+
         total_amount = 0
         for amount in self.amounts:
             total_amount += amount[0]
@@ -1737,11 +2396,11 @@ class AdminDashboard(QMainWindow):
         self.customers_2.setText(str(len(self.customer)))
         self.cart_2.setText(str(len(self.cart)))
 
-    def plot(self, hour, temperature):
-        self.graphWidget.plot(hour, temperature)
-        self.graphWidget.setTitle("Monthly Sales")
-        self.graphWidget.setLabel('left', 'Sales', color='red', size=40)
-        self.graphWidget.setLabel('bottom', 'Month', color='red', size=40)
+    # def plot(self, hour, temperature):
+    #     self.graphWidget.plot(hour, temperature)
+    #     self.graphWidget.setTitle("Monthly Sales")
+    #     self.graphWidget.setLabel('left', 'Sales', color='red', size=40)
+    #     self.graphWidget.setLabel('bottom', 'Month', color='red', size=40)
 
     def dashboardss(self):
         home = AdminDashboard()
@@ -1756,6 +2415,11 @@ class AdminDashboard(QMainWindow):
     def customer(self):
         customers = AdminCustomers()
         widget.addWidget(customers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        
+    def supplier(self):
+        suppliers = AdminSuppliers()
+        widget.addWidget(suppliers)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
     def purchase(self):
@@ -1799,6 +2463,7 @@ class AdminProducts(QMainWindow):
         self.customers.clicked.connect(self.customer)
         self.cart.clicked.connect(self.purchase)
         self.users_2.clicked.connect(self.user)
+        self.suppliers.clicked.connect(self.supplier)
         self.logout.clicked.connect(self.login)
         self.add_product.clicked.connect(self.executeAddProduct)
         self.add_category.clicked.connect(self.executeAddCategory)
@@ -1926,6 +2591,11 @@ class AdminProducts(QMainWindow):
         customers = AdminCustomers()
         widget.addWidget(customers)
         widget.setCurrentIndex(widget.currentIndex()+1)
+        
+    def supplier(self):
+        suppliers = AdminSuppliers()
+        widget.addWidget(suppliers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
 
     def purchase(self):
         purchase = AdminPurchases()
@@ -1969,6 +2639,7 @@ class AdminCustomers(QMainWindow):
         self.products.clicked.connect(self.product)
         self.users_2.clicked.connect(self.user)
         self.customers.clicked.connect(self.customer)
+        self.suppliers.clicked.connect(self.supplier)
         self.cart.clicked.connect(self.purchase)
         self.logout.clicked.connect(self.login)
 
@@ -2081,6 +2752,170 @@ class AdminCustomers(QMainWindow):
         customers = AdminCustomers()
         widget.addWidget(customers)
         widget.setCurrentIndex(widget.currentIndex()+1)
+        
+    def supplier(self):
+        suppliers = AdminSuppliers()
+        widget.addWidget(suppliers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def purchase(self):
+        purchase = AdminPurchases()
+        widget.addWidget(purchase)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def login(self):
+        login = LoginScreen()
+        widget.addWidget(login)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+    
+    def user(self):
+        user = AdminUsers()
+        widget.addWidget(user)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+class AdminSuppliers(QMainWindow):
+    def __init__(self):
+        super(AdminSuppliers, self).__init__()
+        loadUi('./UIs/supplier.ui', self)
+
+        self.search.textChanged.connect(self.searchs)
+
+        try:
+            query = "SELECT name,image,role FROM users where password = ? and username = ?"
+            self.result = mycursor.execute(query, (password, username)).fetchone()
+        except:
+            QMessageBox.critical(
+                self,
+                'Failed - Database error',
+                'Find User Failed',
+                QMessageBox.StandardButton.Ok
+            )
+
+        self.username.setText(str(self.result[0]))
+        pic = QPixmap(self.result[1])
+        self.image.setPixmap(pic)
+
+        self.add_new_cat_2.clicked.connect(self.executeAddSupplier)
+
+        self.dashboard.clicked.connect(self.dashboards)
+        self.products.clicked.connect(self.product)
+        self.users_2.clicked.connect(self.user)
+        self.suppliers.clicked.connect(self.supplier)
+        self.customers.clicked.connect(self.customer)
+        self.cart.clicked.connect(self.purchase)
+        self.logout.clicked.connect(self.login)
+
+        try:
+            result = mycursor.execute("SELECT * FROM supplier").fetchall()
+        except:
+            QMessageBox.critical(
+                self,
+                'Failed - Database error',
+                'Get Customers Failed',
+                QMessageBox.StandardButton.Ok
+            )
+
+        label = [
+            'Name', 'Phone', 'Email', 'Delete'
+        ]
+
+        self.suppliers_table.setColumnCount(4)
+        self.suppliers_table.setColumnWidth(0, 250)
+        self.suppliers_table.setColumnWidth(1, 150)
+        self.suppliers_table.setColumnWidth(2, 250)
+        self.suppliers_table.setColumnWidth(3, 80)
+
+        self.suppliers_table.setHorizontalHeaderLabels(label)
+        self.suppliers_table.setRowCount(len(result))
+
+        row = 0
+        for e in result:
+            self.delete_btn = QPushButton('delete')
+            self.delete_btn.setIcon(QIcon('./icons/recycle-bin-line-icon.png'))
+            self.delete_btn.setStyleSheet('QPushButton { background-color:  rgb(170, 0, 0); color: #fff }')
+            self.delete_btn.clicked.connect(self.deleteClicked)
+            self.suppliers_table.setItem(row, 0, QTableWidgetItem(e[1]))
+            self.suppliers_table.setItem(row, 1, QTableWidgetItem(e[2]))
+            self.suppliers_table.setItem(row, 2, QTableWidgetItem(str(e[3])))
+            self.suppliers_table.setCellWidget(row, 3, self.delete_btn)
+            row += 1
+
+    def executeAddSupplier(self):
+        add_supplier = AddSupplier(self.suppliers_table, self.deleteClicked)
+        add_supplier.setWindowTitle("Add Customer")
+        add_supplier.setWindowIcon(QIcon('./icons/followers-friends-icon.png'))
+        add_supplier.exec()
+
+    def searchs(self, words):
+        self.suppliers_table.setCurrentItem(None)
+
+        if not words:
+            return
+        matching_items = self.suppliers_table.findItems(words, Qt.MatchFlag.MatchContains)
+        if matching_items:
+            for item in matching_items:
+                item.setSelected(True)
+
+    def deleteClicked(self):
+        row = self.suppliers_table.currentRow()
+        item = self.suppliers_table.item(row, 0).text()
+
+        button = QMessageBox.critical(
+            self,
+            'Delete item',
+            'Are you sure that you want to delete this supplier?',
+            QMessageBox.StandardButton.Yes |
+            QMessageBox.StandardButton.No
+        )
+
+        if button == QMessageBox.StandardButton.Yes:
+            self.suppliers_table.removeRow(row)
+
+            try: 
+                try:
+                    query = "DELETE FROM supplier WHERE SupplierName = ?"
+                    mycursor.execute(query, (item,))
+                    db.commit()
+                except:
+                    QMessageBox.critical(
+                        self,
+                        'Failed - Database error',
+                        'Delete Supplier Failed',
+                        QMessageBox.StandardButton.Ok
+                    )
+
+                button = QMessageBox.information(
+                    self,
+                    'Successful',
+                    'Supplier deleted successfully',
+                    QMessageBox.StandardButton.Ok
+                )
+            except:
+                button = QMessageBox.warning(
+                    self,
+                    'Failed!',
+                    'Delete Supplier failed',
+                    QMessageBox.StandardButton.Ok
+                )
+
+    def dashboards(self):
+        home = AdminDashboard()
+        widget.addWidget(home)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def product(self):
+        products = AdminProducts()
+        widget.addWidget(products)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def customer(self):
+        customers = AdminCustomers()
+        widget.addWidget(customers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def supplier(self):
+        suppliers = AdminSuppliers()
+        widget.addWidget(suppliers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
 
     def purchase(self):
         purchase = AdminPurchases()
@@ -2123,6 +2958,7 @@ class AdminUsers(QMainWindow):
         self.dashboard.clicked.connect(self.dashboards)
         self.products.clicked.connect(self.product)
         self.customers.clicked.connect(self.customer)
+        self.suppliers.clicked.connect(self.supplier)
         self.users_2.clicked.connect(self.user)
         self.cart.clicked.connect(self.purchase)
         self.logout.clicked.connect(self.login)
@@ -2231,6 +3067,11 @@ class AdminUsers(QMainWindow):
         customers = AdminCustomers()
         widget.addWidget(customers)
         widget.setCurrentIndex(widget.currentIndex()+1)
+        
+    def supplier(self):
+        suppliers = AdminSuppliers()
+        widget.addWidget(suppliers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
 
     def purchase(self):
         purchase = AdminPurchases()
@@ -2271,6 +3112,7 @@ class AdminPurchases(QMainWindow):
         self.dashboard.clicked.connect(self.dashboardss)
         self.products.clicked.connect(self.product)
         self.users_2.clicked.connect(self.user)
+        self.suppliers.clicked.connect(self.supplier)
         self.customers.clicked.connect(self.customer)
         self.cart.clicked.connect(self.purchase)
         self.logout.clicked.connect(self.login)
@@ -2332,6 +3174,11 @@ class AdminPurchases(QMainWindow):
     def customer(self):
         customers = AdminCustomers()
         widget.addWidget(customers)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        
+    def supplier(self):
+        suppliers = AdminSuppliers()
+        widget.addWidget(suppliers)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
     def purchase(self):

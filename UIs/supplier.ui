@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Customers</string>
+   <string>Suppliers</string>
   </property>
   <property name="styleSheet">
    <string notr="true">MainWindow{
@@ -186,7 +186,7 @@
                <property name="maximumSize">
                 <size>
                  <width>16777215</width>
-                 <height>40</height>
+                 <height>50</height>
                 </size>
                </property>
                <property name="styleSheet">
@@ -269,7 +269,7 @@ color: rgb(0, 85, 255);</string>
 color: rgb(0, 0, 255);</string>
                   </property>
                   <property name="text">
-                   <string>Products</string>
+                   <string>Inventory</string>
                   </property>
                   <property name="icon">
                    <iconset>
@@ -289,7 +289,7 @@ color: rgb(0, 0, 255);</string>
                 </size>
                </property>
                <property name="styleSheet">
-                <string notr="true">background-color: rgb(210, 210, 241);</string>
+                <string notr="true"/>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_23">
                 <property name="leftMargin">
@@ -375,7 +375,10 @@ color: rgb(0, 0, 255);</string>
              </item>
              <item>
               <widget class="QWidget" name="widget_14" native="true">
-               <layout class="QVBoxLayout" name="verticalLayout_11">
+               <property name="styleSheet">
+                <string notr="true">background-color: rgb(210, 210, 241);</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_13">
                 <property name="leftMargin">
                  <number>19</number>
                 </property>
@@ -406,6 +409,54 @@ color: rgb(0, 0, 255);</string>
                   <property name="icon">
                    <iconset>
                     <normaloff>../icons/hotel-supplier.png</normaloff>../icons/hotel-supplier.png</iconset>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_24" native="true">
+               <layout class="QVBoxLayout" name="verticalLayout_11">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <property name="leftMargin">
+                 <number>19</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item alignment="Qt::AlignLeft">
+                 <widget class="QPushButton" name="users_2">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(0, 0, 255);</string>
+                  </property>
+                  <property name="text">
+                   <string>Users</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../icons/edit-pen-icon.png</normaloff>../icons/edit-pen-icon.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>16</width>
+                    <height>16</height>
+                   </size>
                   </property>
                  </widget>
                 </item>
@@ -515,7 +566,7 @@ border-radius: 5px;</string>
              <string notr="true">font: 81 8pt &quot;Open Sans ExtraBold&quot;;</string>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Customers&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Suppliers&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="margin">
              <number>9</number>
@@ -654,7 +705,7 @@ border-radius: 5px;</string>
 font: 10pt &quot;Open Sans&quot;;</string>
                   </property>
                   <property name="placeholderText">
-                   <string>Search Customer....</string>
+                   <string>Search Supplier....</string>
                   </property>
                  </widget>
                 </item>
@@ -759,11 +810,11 @@ color: rgb(255, 255, 255);
 font: 75 11pt &quot;Open Sans Extrabold&quot;;</string>
                   </property>
                   <property name="text">
-                   <string>Add Customer</string>
+                   <string>Add Supplier</string>
                   </property>
                   <property name="icon">
                    <iconset>
-                    <normaloff>../icons/icons8-customer-64.png</normaloff>../icons/icons8-customer-64.png</iconset>
+                    <normaloff>../icons/supplier.png</normaloff>../icons/supplier.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -789,7 +840,7 @@ font: 75 11pt &quot;Open Sans Extrabold&quot;;</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_10">
              <item>
-              <widget class="QTableWidget" name="customer_table">
+              <widget class="QTableWidget" name="suppliers_table">
                <property name="font">
                 <font>
                  <family>Open Sans ExtraBold</family>

@@ -269,7 +269,7 @@ color: rgb(0, 85, 255);</string>
 color: rgb(0, 0, 255);</string>
                   </property>
                   <property name="text">
-                   <string>Products</string>
+                   <string>Inventory</string>
                   </property>
                   <property name="icon">
                    <iconset>
@@ -367,6 +367,46 @@ color: rgb(0, 0, 255);</string>
                   <property name="icon">
                    <iconset>
                     <normaloff>../icons/order-placed-purchased-icon.png</normaloff>../icons/order-placed-purchased-icon.png</iconset>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_14" native="true">
+               <layout class="QVBoxLayout" name="verticalLayout_13">
+                <property name="leftMargin">
+                 <number>19</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item alignment="Qt::AlignLeft">
+                 <widget class="QPushButton" name="suppliers">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(0, 0, 255);
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Suppliers</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../icons/hotel-supplier.png</normaloff>../icons/hotel-supplier.png</iconset>
                   </property>
                  </widget>
                 </item>
@@ -839,7 +879,7 @@ font: 75 11pt &quot;Open Sans Extrabold&quot;;</string>
           <item alignment="Qt::AlignHCenter">
            <widget class="QLabel" name="label_8">
             <property name="text">
-             <string>2023 JAMS Final Project Work</string>
+             <string>2023 Final Project Work</string>
             </property>
            </widget>
           </item>
