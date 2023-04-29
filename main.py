@@ -541,7 +541,7 @@ class AmountPaid(QDialog):
 
                     for report in self.cartItems:
                         try:
-                            query = "INSERT INTO report(Item, Quantity) VALUES (?,?,datetime('now'))"
+                            query = "INSERT INTO report(Item, Quantity, DateTime) VALUES (?,?,datetime('now'))"
                             mycursor.execute(query,(report[3], report[2]))
                             db.commit()
                         except:
