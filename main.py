@@ -76,9 +76,11 @@ else:
         PRIMARY KEY("SupplierID" AUTOINCREMENT)
     );""")
     db.execute("""CREATE TABLE "report" (
+        "ReportID"	INTEGER,
         "Item"	TEXT,
         "Quantity"	INTEGER NOT NULL,
         "DateTime"	TEXT NOT NULL,
+        PRIMARY KEY("ReportID" AUTOINCREMENT)
     );""")
 
     db.commit()
@@ -539,7 +541,7 @@ class AmountPaid(QDialog):
 
                     for report in self.cartItems:
                         try:
-                            query = "INSERT INTO report VALUES (?,?,datetime('now'))"
+                            query = "INSERT INTO report(Items, Quantity) VALUES (?,?,datetime('now'))"
                             mycursor.execute(query,(report[3], report[2]))
                             db.commit()
                         except:
