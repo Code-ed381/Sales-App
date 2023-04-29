@@ -998,7 +998,7 @@ class SalesAttendantDashboard(QMainWindow):
             ) 
 
         try:
-            self.report = mycursor.execute("SELECT * FROM report").fetchall()
+            self.report = mycursor.execute("SELECT Item,Quantity,DateTime FROM report").fetchall()
             print(self.report)
         except:
             QMessageBox.critical(
@@ -1665,7 +1665,7 @@ class StoreOfficerDashboard(QMainWindow):
             ) 
 
         try:
-            self.report = mycursor.execute("SELECT * FROM report").fetchall()
+            self.report = mycursor.execute("SELECT Item,Quantity,DateTime FROM report").fetchall()
             print(self.report)
         except:
             QMessageBox.critical(
@@ -2363,7 +2363,7 @@ class AdminDashboard(QMainWindow):
             ) 
 
         try:
-            self.report = mycursor.execute("SELECT * FROM report").fetchall()
+            self.report = mycursor.execute("SELECT Item,Quantity,DateTime FROM report").fetchall()
             print(self.report)
         except:
             QMessageBox.critical(
